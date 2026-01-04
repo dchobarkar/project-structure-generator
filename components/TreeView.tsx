@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * Collapsible folder tree: renders the generated structure with expand/collapse per folder.
+ * "Expand all" / "Collapse all" buttons; each folder row toggles its children.
+ */
+
 import { useMemo, useCallback, useState } from "react";
 import { Folder, ChevronRight, ChevronDown } from "lucide-react";
 
@@ -9,6 +14,7 @@ interface TreeViewProps {
   structure: FolderTree | null;
 }
 
+/** Recursively collects all paths that have children (for "Collapse all"). */
 const getPathsWithChildren = (node: FolderTree, prefix = ""): string[] => {
   const paths: string[] = [];
   for (const key of Object.keys(node)) {
@@ -37,6 +43,7 @@ interface TreeFolderRowProps {
   depth: number;
 }
 
+/** Single folder row: chevron (expand/collapse), folder icon, name; children rendered when expanded. */
 const TreeFolderRow = ({
   name,
   hasChildren,
@@ -83,6 +90,7 @@ interface TreeFolderProps {
   onToggle: (path: string) => void;
 }
 
+/** Recursively renders folder nodes; uses collapsedPaths to show/hide children. */
 const TreeFolder = ({
   node,
   pathPrefix,
@@ -127,6 +135,7 @@ const TreeFolder = ({
   );
 };
 
+/** Main tree view: Expand all / Collapse all, then recursive TreeFolder. */
 const TreeView = ({ structure }: TreeViewProps) => {
   const [collapsedPaths, setCollapsedPaths] = useState<Set<string>>(new Set());
 

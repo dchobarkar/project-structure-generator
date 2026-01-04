@@ -1,3 +1,7 @@
+/**
+ * Page section with title and optional content wrapper class (e.g. max-h overflow). Used for "Folder tree" and "CLI commands".
+ */
+
 interface SectionProps {
   title: string;
   children: React.ReactNode;

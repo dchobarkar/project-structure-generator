@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Main page: Folder Structure Generator.
+ * Renders a sticky config panel (left) and the generated folder tree + CLI commands (right).
+ * Config state is normalized so framework always matches the selected project type.
+ */
+
 import { useState, useCallback, useMemo } from "react";
 
 import type { GeneratorConfig } from "@/types/generator";
@@ -11,6 +17,7 @@ import TreeView from "@/components/TreeView";
 import CLIView from "@/components/CLIView";
 import { Section } from "@/components/ui";
 
+/** Initial config when the app loads. */
 const DEFAULT_CONFIG: GeneratorConfig = {
   projectType: "frontend",
   framework: "nextjs",
@@ -21,6 +28,7 @@ const DEFAULT_CONFIG: GeneratorConfig = {
 const Page = () => {
   const [config, setConfig] = useState<GeneratorConfig>(DEFAULT_CONFIG);
 
+  /** Ensure framework is valid for current project type; otherwise reset to first allowed. */
   const normalizedConfig = useMemo(() => {
     const allowed = FRAMEWORKS_BY_PROJECT_TYPE[config.projectType];
     if (allowed.includes(config.framework)) return config;
@@ -31,6 +39,7 @@ const Page = () => {
     setConfig(next);
   }, []);
 
+  /** Folder tree and CLI commands are derived from normalized config. */
   const structure = buildStructure(normalizedConfig);
   const cliCommands = buildCLI(structure);
 

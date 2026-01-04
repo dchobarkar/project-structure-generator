@@ -1,3 +1,7 @@
+/**
+ * Reusable checkbox with label (can be text or JSX, e.g. <code>). Used for framework options and preset modules.
+ */
+
 interface CheckboxFieldProps {
   checked: boolean;
   onChange: (checked: boolean) => void;

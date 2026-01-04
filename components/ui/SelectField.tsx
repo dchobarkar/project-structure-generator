@@ -1,3 +1,7 @@
+/**
+ * Reusable select (dropdown) with label. Used for project type, framework, architecture, React/Vue state.
+ */
+
 interface SelectOption<T extends string = string> {
   value: T;
   label: string;

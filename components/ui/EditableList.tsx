@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * Add/remove list of text inputs with stable keys (useStableIds) so inputs don't remount on typing.
+ * Used for custom modules and custom folders in ConfigPanel.
+ */
+
 import useStableIds from "@/hooks/useStableIds";
 
 interface EditableListProps {
@@ -28,6 +33,8 @@ const EditableList = ({
   removeAriaLabel = "Remove",
   inputClassName = defaultInputClassName,
 }: EditableListProps) => {
+  /** Stable ids per row so key doesn't change when user types (avoids focus loss). */
+  /** Stable ids per row so key doesn't change when user types (avoids focus loss). */
   const ids = useStableIds(items.length);
 
   const updateAt = (index: number, value: string) => {

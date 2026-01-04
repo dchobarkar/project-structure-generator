@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * Displays the generated CLI commands (mkdir -p ...) in a code block
+ * and provides a "Copy" button to copy them to the clipboard.
+ */
+
 import { useCallback, useState } from "react";
 import { Copy, Check } from "lucide-react";
 

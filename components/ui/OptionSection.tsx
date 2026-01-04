@@ -1,3 +1,7 @@
+/**
+ * Wrapper for framework-specific options (e.g. "Next.js options", "React options"): bordered box with title.
+ */
+
 interface OptionSectionProps {
   title: string;
   children: React.ReactNode;

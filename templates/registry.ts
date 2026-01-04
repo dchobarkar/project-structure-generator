@@ -1,3 +1,9 @@
+/**
+ * Template registry: base folder trees per project type + framework + architecture,
+ * and helpers to apply framework options (Next.js src/route groups, React store, etc.)
+ * and to find where feature modules go (getModulesContainers).
+ */
+
 import type {
   FolderTree,
   ProjectType,
@@ -6,6 +12,7 @@ import type {
   GeneratorConfig,
 } from "@/types/generator";
 
+/** Base templates: one FolderTree per (projectType, framework, architecture). */
 const frontendNextLayered: FolderTree = {
   app: {},
   components: {},
@@ -380,9 +387,11 @@ const TEMPLATES: Partial<Record<TemplateKey, FolderTree>> = {
   backend_nestjs_domain: backendNestDomain,
 };
 
+/** Builds the template key from config (e.g. "frontend_nextjs_feature"). */
 const templateKey = (config: GeneratorConfig): TemplateKey =>
   `${config.projectType}_${config.framework}_${config.architecture}`;
 
+/** Keys moved under src/ when Next.js "Use src directory" is enabled. */
 const NEXTJS_SRC_KEYS = [
   "app",
   "components",
@@ -397,6 +406,7 @@ const NEXTJS_SRC_KEYS = [
   "shared",
 ] as const;
 
+/** Applies Next.js options: route groups under app/, and moving top-level keys under src/ if useSrcDirectory. */
 const applyNextJsOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
@@ -427,6 +437,7 @@ const applyNextJsOptions = (
   }
 };
 
+/** Returns a deep copy of the base template for config, with all framework options applied. */
 const getTemplate = (config: GeneratorConfig): FolderTree => {
   const key = templateKey(config);
   const template = TEMPLATES[key];
@@ -447,6 +458,7 @@ const getTemplate = (config: GeneratorConfig): FolderTree => {
   return structure;
 };
 
+/** Removes tests/ when SvelteKit "Include tests" is off. */
 const applySvelteKitOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
@@ -458,6 +470,7 @@ const applySvelteKitOptions = (
   }
 };
 
+/** Toggles tests/ for Remix based on includeTests. */
 const applyRemixOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
@@ -472,6 +485,7 @@ const applyRemixOptions = (
   }
 };
 
+/** Adds stores/ for Pinia, tests/ for Vue when options are set. */
 const applyVueOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
@@ -488,6 +502,7 @@ const applyVueOptions = (
   }
 };
 
+/** Toggles e2e/ for Angular based on includeTests. */
 const applyAngularOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
@@ -501,6 +516,7 @@ const applyAngularOptions = (
   }
 };
 
+/** Removes tests/ when Node "Include tests" is off. */
 const applyNodeOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
@@ -512,6 +528,7 @@ const applyNodeOptions = (
   }
 };
 
+/** Removes test/ when NestJS "Include tests" is off. */
 const applyNestOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
@@ -523,6 +540,7 @@ const applyNestOptions = (
   }
 };
 
+/** Adds store/ or contexts/ for React state, __tests__/ when includeTests. */
 const applyReactOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
@@ -544,6 +562,7 @@ const applyReactOptions = (
   }
 };
 
+/** Returns the FolderTree containers where feature modules (auth, billing, etc.) should be added. Depends on project type and architecture (e.g. structure.modules, apps.web.modules, src.features, structure.domains). */
 const getModulesContainers = (
   structure: FolderTree,
   config: GeneratorConfig,

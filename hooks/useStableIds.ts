@@ -1,3 +1,9 @@
+/**
+ * Hook that returns a stable array of ids of length `count`.
+ * When `count` increases, new ids (Date.now()) are appended; when it decreases, ids are trimmed.
+ * Used by EditableList so list item keys don't change when the user types (avoids input remount/focus loss).
+ */
+
 import { useState, useEffect } from "react";
 
 const useStableIds = (count: number): number[] => {

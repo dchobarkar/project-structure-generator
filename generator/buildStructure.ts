@@ -1,6 +1,15 @@
+/**
+ * Builds the folder tree from config: base template + feature modules + custom paths.
+ * Used by the main page to derive the structure shown in the tree view.
+ */
+
 import type { GeneratorConfig, FolderTree } from "@/types/generator";
 import { getTemplate, getModulesContainers } from "@/templates/registry";
 
+/**
+ * Ensures a path like "src/utils/helpers" exists in the tree, creating nested folders as needed.
+ * Mutates `structure` in place.
+ */
 const applyCustomPath = (structure: FolderTree, path: string): void => {
   const segments = path
     .split("/")
@@ -27,6 +36,12 @@ const applyCustomPath = (structure: FolderTree, path: string): void => {
   }
 };
 
+/**
+ * Returns the full folder tree for the given config:
+ * 1. Base template for project type + framework + architecture
+ * 2. Feature modules (auth, billing, etc.) added to the right containers
+ * 3. Custom folder paths merged in
+ */
 const buildStructure = (config: GeneratorConfig): FolderTree => {
   const structure = getTemplate(config);
   const containers = getModulesContainers(structure, config);

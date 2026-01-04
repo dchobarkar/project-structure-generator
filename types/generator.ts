@@ -1,3 +1,8 @@
+/**
+ * Types and constants for the folder structure generator.
+ * Defines project type, framework, architecture, config shape, and folder tree structure.
+ */
+
 type ProjectType = "frontend" | "fullstack" | "backend";
 
 type Framework =
@@ -12,6 +17,7 @@ type Framework =
 
 type Architecture = "layered" | "feature" | "domain";
 
+/** Frameworks allowed for each project type (e.g. backend only allows nextjs, node, nestjs). */
 const FRAMEWORKS_BY_PROJECT_TYPE: Record<ProjectType, Framework[]> = {
   frontend: ["nextjs", "react", "vue", "angular"],
   fullstack: [
@@ -27,6 +33,7 @@ const FRAMEWORKS_BY_PROJECT_TYPE: Record<ProjectType, Framework[]> = {
   backend: ["nextjs", "node", "nestjs"],
 };
 
+/** Next.js-specific options: src directory, route groups. */
 interface NextJsOptions {
   useSrcDirectory?: boolean;
   routeGroups?: string[];
@@ -66,6 +73,7 @@ interface RemixOptions {
   includeTests?: boolean;
 }
 
+/** Full config for the generator: type, framework, architecture, modules, custom folders, framework options. */
 interface GeneratorConfig {
   projectType: ProjectType;
   framework: Framework;
@@ -84,6 +92,7 @@ interface GeneratorConfig {
   };
 }
 
+/** Nested object representing a folder tree; keys are folder names, values are children or empty object. */
 interface FolderTree {
   [key: string]: FolderTree | Record<string, never>;
 }

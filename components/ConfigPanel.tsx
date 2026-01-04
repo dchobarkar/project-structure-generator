@@ -1,3 +1,9 @@
+/**
+ * Configuration panel: project type, framework, architecture, framework-specific options,
+ * feature modules (preset + custom), and custom folders.
+ * Keeps framework options in sync when project type or framework changes (only relevant options kept).
+ */
+
 import type {
   GeneratorConfig,
   ProjectType,
@@ -31,6 +37,7 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
     allowedFrameworks.includes(opt.value),
   );
 
+  /** Preset modules (auth, billing, etc.) vs custom module names for EditableList. */
   const presetModules = (config.modules ?? []).filter((m) =>
     MODULE_OPTIONS.includes(m as (typeof MODULE_OPTIONS)[number]),
   );
@@ -45,6 +52,7 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
     onConfigChange({ ...config, [key]: value });
   };
 
+  /** On project type change: pick valid framework and keep only that framework's options. */
   const handleProjectTypeChange = (projectType: ProjectType) => {
     const allowed = FRAMEWORKS_BY_PROJECT_TYPE[projectType];
     const framework = allowed.includes(config.framework)
@@ -62,6 +70,7 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
     });
   };
 
+  /** On framework change: keep only the new framework's options. */
   const handleFrameworkChange = (framework: Framework) => {
     const optionsForFramework = config.options?.[framework];
     onConfigChange({

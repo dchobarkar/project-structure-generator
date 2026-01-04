@@ -1,3 +1,4 @@
+/** Re-exports shared UI components and their prop types for the config panel and page. */
 export { default as CheckboxField } from "./CheckboxField";
 export type { CheckboxFieldProps } from "./CheckboxField";
 export { default as EditableList } from "./EditableList";
