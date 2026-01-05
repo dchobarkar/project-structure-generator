@@ -1,6 +1,6 @@
-export type ProjectType = "frontend" | "fullstack" | "backend";
+type ProjectType = "frontend" | "fullstack" | "backend";
 
-export type Framework =
+type Framework =
   | "nextjs"
   | "react"
   | "vue"
@@ -10,9 +10,9 @@ export type Framework =
   | "node"
   | "nestjs";
 
-export type Architecture = "layered" | "feature" | "domain";
+type Architecture = "layered" | "feature" | "domain";
 
-export const FRAMEWORKS_BY_PROJECT_TYPE: Record<ProjectType, Framework[]> = {
+const FRAMEWORKS_BY_PROJECT_TYPE: Record<ProjectType, Framework[]> = {
   frontend: ["nextjs", "react", "vue", "angular"],
   fullstack: [
     "nextjs",
@@ -27,46 +27,46 @@ export const FRAMEWORKS_BY_PROJECT_TYPE: Record<ProjectType, Framework[]> = {
   backend: ["nextjs", "node", "nestjs"],
 };
 
-export interface NextJsOptions {
+interface NextJsOptions {
   useSrcDirectory?: boolean;
   routeGroups?: string[];
 }
 
-export type ReactStateManagement = "none" | "redux" | "zustand" | "context";
+type ReactStateManagement = "none" | "redux" | "zustand" | "context";
 
-export interface ReactOptions {
+interface ReactOptions {
   stateManagement?: ReactStateManagement;
   includeTests?: boolean;
 }
 
-export interface NodeOptions {
+interface NodeOptions {
   includeTests?: boolean;
 }
 
-export interface NestJsOptions {
+interface NestJsOptions {
   includeTests?: boolean;
 }
 
-export type VueStateManagement = "none" | "pinia";
+type VueStateManagement = "none" | "pinia";
 
-export interface VueOptions {
+interface VueOptions {
   stateManagement?: VueStateManagement;
   includeTests?: boolean;
 }
 
-export interface AngularOptions {
+interface AngularOptions {
   includeTests?: boolean;
 }
 
-export interface SvelteKitOptions {
+interface SvelteKitOptions {
   includeTests?: boolean;
 }
 
-export interface RemixOptions {
+interface RemixOptions {
   includeTests?: boolean;
 }
 
-export interface GeneratorConfig {
+interface GeneratorConfig {
   projectType: ProjectType;
   framework: Framework;
   architecture: Architecture;
@@ -84,6 +84,25 @@ export interface GeneratorConfig {
   };
 }
 
-export interface FolderTree {
+interface FolderTree {
   [key: string]: FolderTree | Record<string, never>;
 }
+
+export type {
+  ProjectType,
+  Framework,
+  Architecture,
+  NextJsOptions,
+  ReactStateManagement,
+  ReactOptions,
+  NodeOptions,
+  NestJsOptions,
+  VueStateManagement,
+  VueOptions,
+  AngularOptions,
+  SvelteKitOptions,
+  RemixOptions,
+  GeneratorConfig,
+  FolderTree,
+};
+export { FRAMEWORKS_BY_PROJECT_TYPE };

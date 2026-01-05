@@ -189,4 +189,4 @@ const TreeView = ({ structure }: TreeViewProps) => {
   );
 };
 
-export { TreeView };
+export default TreeView;

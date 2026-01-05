@@ -44,5 +44,5 @@ const SelectField = <T extends string>({
   );
 };
 
-export { SelectField };
+export default SelectField;
 export type { SelectFieldProps, SelectOption };

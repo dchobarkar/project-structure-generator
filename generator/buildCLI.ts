@@ -28,4 +28,4 @@ const buildCLI = (structure: FolderTree, basePath = "."): string => {
   return commands.join("\n");
 };
 
-export { buildCLI };
+export default buildCLI;

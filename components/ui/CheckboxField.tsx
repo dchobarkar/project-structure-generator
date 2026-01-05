@@ -26,5 +26,5 @@ const CheckboxField = ({ checked, onChange, label, id }: CheckboxFieldProps) => 
   );
 };
 
-export { CheckboxField };
+export default CheckboxField;
 export type { CheckboxFieldProps };

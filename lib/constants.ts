@@ -6,13 +6,13 @@ import type {
   VueStateManagement,
 } from "@/types/generator";
 
-export const PROJECT_TYPES: { value: ProjectType; label: string }[] = [
+const PROJECT_TYPES: { value: ProjectType; label: string }[] = [
   { value: "frontend", label: "Frontend" },
   { value: "fullstack", label: "Fullstack" },
   { value: "backend", label: "Backend" },
 ];
 
-export const FRAMEWORKS: { value: Framework; label: string }[] = [
+const FRAMEWORKS: { value: Framework; label: string }[] = [
   { value: "nextjs", label: "Next.js" },
   { value: "react", label: "React" },
   { value: "vue", label: "Vue" },
@@ -23,20 +23,20 @@ export const FRAMEWORKS: { value: Framework; label: string }[] = [
   { value: "nestjs", label: "NestJS" },
 ];
 
-export const ARCHITECTURES: { value: Architecture; label: string }[] = [
+const ARCHITECTURES: { value: Architecture; label: string }[] = [
   { value: "layered", label: "Layered" },
   { value: "feature", label: "Feature" },
   { value: "domain", label: "Domain" },
 ];
 
-export const MODULE_OPTIONS = [
+const MODULE_OPTIONS = [
   "auth",
   "billing",
   "analytics",
   "notifications",
 ] as const;
 
-export const REACT_STATE_OPTIONS: {
+const REACT_STATE_OPTIONS: {
   value: ReactStateManagement;
   label: string;
 }[] = [
@@ -46,7 +46,7 @@ export const REACT_STATE_OPTIONS: {
   { value: "context", label: "Context (contexts/)" },
 ];
 
-export const VUE_STATE_OPTIONS: {
+const VUE_STATE_OPTIONS: {
   value: VueStateManagement;
   label: string;
 }[] = [
@@ -54,4 +54,14 @@ export const VUE_STATE_OPTIONS: {
   { value: "pinia", label: "Pinia (stores/)" },
 ];
 
-export const NEXTJS_ROUTE_GROUPS = ["(marketing)", "(shop)", "(dashboard)"];
+const NEXTJS_ROUTE_GROUPS = ["(marketing)", "(shop)", "(dashboard)"];
+
+export {
+  PROJECT_TYPES,
+  FRAMEWORKS,
+  ARCHITECTURES,
+  MODULE_OPTIONS,
+  REACT_STATE_OPTIONS,
+  VUE_STATE_OPTIONS,
+  NEXTJS_ROUTE_GROUPS,
+};

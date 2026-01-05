@@ -50,4 +50,4 @@ const buildStructure = (config: GeneratorConfig): FolderTree => {
   return structure;
 };
 
-export { buildStructure };
+export default buildStructure;

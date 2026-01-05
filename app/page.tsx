@@ -4,11 +4,11 @@ import { useState, useCallback, useMemo } from "react";
 
 import type { GeneratorConfig } from "@/types/generator";
 import { FRAMEWORKS_BY_PROJECT_TYPE } from "@/types/generator";
-import { buildStructure } from "@/generator/buildStructure";
-import { buildCLI } from "@/generator/buildCLI";
-import { ConfigPanel } from "@/components/ConfigPanel";
-import { TreeView } from "@/components/TreeView";
-import { CLIView } from "@/components/CLIView";
+import buildStructure from "@/generator/buildStructure";
+import buildCLI from "@/generator/buildCLI";
+import ConfigPanel from "@/components/ConfigPanel";
+import TreeView from "@/components/TreeView";
+import CLIView from "@/components/CLIView";
 import { Section } from "@/components/ui";
 
 const DEFAULT_CONFIG: GeneratorConfig = {

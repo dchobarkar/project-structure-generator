@@ -414,4 +414,4 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
   );
 };
 
-export { ConfigPanel };
+export default ConfigPanel;

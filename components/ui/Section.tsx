@@ -17,5 +17,5 @@ const Section = ({ title, children, contentClassName }: SectionProps) => {
   );
 };
 
-export { Section };
+export default Section;
 export type { SectionProps };

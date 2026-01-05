@@ -1,10 +1,10 @@
-export { CheckboxField } from "./CheckboxField";
+export { default as CheckboxField } from "./CheckboxField";
 export type { CheckboxFieldProps } from "./CheckboxField";
-export { EditableList } from "./EditableList";
+export { default as EditableList } from "./EditableList";
 export type { EditableListProps } from "./EditableList";
-export { OptionSection } from "./OptionSection";
+export { default as OptionSection } from "./OptionSection";
 export type { OptionSectionProps } from "./OptionSection";
-export { Section } from "./Section";
+export { default as Section } from "./Section";
 export type { SectionProps } from "./Section";
-export { SelectField } from "./SelectField";
+export { default as SelectField } from "./SelectField";
 export type { SelectFieldProps, SelectOption } from "./SelectField";

@@ -56,4 +56,4 @@ const CLIView = ({ commands }: CLIViewProps) => {
   );
 };
 
-export { CLIView };
+export default CLIView;

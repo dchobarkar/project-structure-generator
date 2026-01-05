@@ -15,5 +15,5 @@ const OptionSection = ({ title, children }: OptionSectionProps) => {
   );
 };
 
-export { OptionSection };
+export default OptionSection;
 export type { OptionSectionProps };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useStableIds } from "@/hooks/useStableIds";
+import useStableIds from "@/hooks/useStableIds";
 
 interface EditableListProps {
   items: string[];
@@ -72,5 +72,5 @@ const EditableList = ({
   );
 };
 
-export { EditableList };
+export default EditableList;
 export type { EditableListProps };

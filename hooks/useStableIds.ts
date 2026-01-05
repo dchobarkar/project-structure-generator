@@ -19,4 +19,4 @@ const useStableIds = (count: number): number[] => {
   return ids;
 };
 
-export { useStableIds };
+export default useStableIds;
