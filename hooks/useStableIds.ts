@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export function useStableIds(count: number): number[] {
+const useStableIds = (count: number): number[] => {
   const [ids, setIds] = useState<number[]>([]);
 
   useEffect(() => {
@@ -17,4 +17,6 @@ export function useStableIds(count: number): number[] {
   }, [count]);
 
   return ids;
-}
+};
+
+export { useStableIds };

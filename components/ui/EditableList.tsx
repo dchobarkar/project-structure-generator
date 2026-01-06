@@ -20,14 +20,14 @@ const removeButtonClassName =
 const addButtonClassName =
   "self-start rounded-md border border-dashed border-neutral-300 px-3 py-2 text-sm text-neutral-600 transition hover:border-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 dark:border-neutral-600 dark:text-neutral-400 dark:hover:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-100";
 
-function EditableList({
+const EditableList = ({
   items,
   onChange,
   placeholder = "e.g. item",
   addButtonLabel = "+ Add",
   removeAriaLabel = "Remove",
   inputClassName = defaultInputClassName,
-}: EditableListProps) {
+}: EditableListProps) => {
   const ids = useStableIds(items.length);
 
   const updateAt = (index: number, value: string) => {
@@ -70,7 +70,7 @@ function EditableList({
       </button>
     </div>
   );
-}
+};
 
 export { EditableList };
 export type { EditableListProps };

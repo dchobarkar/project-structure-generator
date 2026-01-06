@@ -16,13 +16,13 @@ const selectClassName =
 
 const labelClassName = "mb-1.5 block text-sm font-medium text-foreground";
 
-function SelectField<T extends string>({
+const SelectField = <T extends string>({
   id,
   label,
   value,
   options,
   onChange,
-}: SelectFieldProps<T>) {
+}: SelectFieldProps<T>) => {
   return (
     <div>
       <label htmlFor={id} className={labelClassName}>
@@ -42,7 +42,7 @@ function SelectField<T extends string>({
       </select>
     </div>
   );
-}
+};
 
 export { SelectField };
 export type { SelectFieldProps, SelectOption };

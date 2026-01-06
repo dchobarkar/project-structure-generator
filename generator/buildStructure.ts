@@ -1,7 +1,7 @@
 import type { GeneratorConfig, FolderTree } from "@/types/generator";
 import { getTemplate, getModulesContainers } from "@/templates/registry";
 
-function applyCustomPath(structure: FolderTree, path: string): void {
+const applyCustomPath = (structure: FolderTree, path: string): void => {
   const segments = path
     .split("/")
     .map((s) => s.trim())
@@ -25,9 +25,9 @@ function applyCustomPath(structure: FolderTree, path: string): void {
       current = next;
     }
   }
-}
+};
 
-export function buildStructure(config: GeneratorConfig): FolderTree {
+const buildStructure = (config: GeneratorConfig): FolderTree => {
   const structure = getTemplate(config);
   const containers = getModulesContainers(structure, config);
 
@@ -48,4 +48,6 @@ export function buildStructure(config: GeneratorConfig): FolderTree {
   }
 
   return structure;
-}
+};
+
+export { buildStructure };

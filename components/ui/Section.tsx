@@ -4,7 +4,7 @@ interface SectionProps {
   contentClassName?: string;
 }
 
-function Section({ title, children, contentClassName }: SectionProps) {
+const Section = ({ title, children, contentClassName }: SectionProps) => {
   return (
     <section className="rounded-lg border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
       <h2 className="mb-4 text-base font-semibold text-foreground">{title}</h2>
@@ -15,7 +15,7 @@ function Section({ title, children, contentClassName }: SectionProps) {
       )}
     </section>
   );
-}
+};
 
 export { Section };
 export type { SectionProps };

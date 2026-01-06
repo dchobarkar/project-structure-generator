@@ -380,9 +380,8 @@ const TEMPLATES: Partial<Record<TemplateKey, FolderTree>> = {
   backend_nestjs_domain: backendNestDomain,
 };
 
-function templateKey(config: GeneratorConfig): TemplateKey {
-  return `${config.projectType}_${config.framework}_${config.architecture}`;
-}
+const templateKey = (config: GeneratorConfig): TemplateKey =>
+  `${config.projectType}_${config.framework}_${config.architecture}`;
 
 const NEXTJS_SRC_KEYS = [
   "app",
@@ -398,10 +397,10 @@ const NEXTJS_SRC_KEYS = [
   "shared",
 ] as const;
 
-function applyNextJsOptions(
+const applyNextJsOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
-): void {
+): void => {
   if (config.framework !== "nextjs") return;
   const opts = config.options?.nextjs;
 
@@ -426,9 +425,9 @@ function applyNextJsOptions(
     }
     structure.src = src;
   }
-}
+};
 
-export function getTemplate(config: GeneratorConfig): FolderTree {
+const getTemplate = (config: GeneratorConfig): FolderTree => {
   const key = templateKey(config);
   const template = TEMPLATES[key];
   let structure: FolderTree;
@@ -446,23 +445,23 @@ export function getTemplate(config: GeneratorConfig): FolderTree {
   applySvelteKitOptions(structure, config);
   applyRemixOptions(structure, config);
   return structure;
-}
+};
 
-function applySvelteKitOptions(
+const applySvelteKitOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
-): void {
+): void => {
   if (config.framework !== "sveltekit") return;
   const opts = config.options?.sveltekit;
   if (opts?.includeTests === false && structure.tests !== undefined) {
     delete structure.tests;
   }
-}
+};
 
-function applyRemixOptions(
+const applyRemixOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
-): void {
+): void => {
   if (config.framework !== "remix") return;
   const opts = config.options?.remix;
   if (opts?.includeTests === false && structure.tests !== undefined) {
@@ -471,9 +470,12 @@ function applyRemixOptions(
   if (opts?.includeTests === true && !structure.tests) {
     (structure as FolderTree).tests = {};
   }
-}
+};
 
-function applyVueOptions(structure: FolderTree, config: GeneratorConfig): void {
+const applyVueOptions = (
+  structure: FolderTree,
+  config: GeneratorConfig,
+): void => {
   if (config.framework !== "vue") return;
   const opts = config.options?.vue;
   const src = structure.src as FolderTree | undefined;
@@ -484,12 +486,12 @@ function applyVueOptions(structure: FolderTree, config: GeneratorConfig): void {
   if (opts?.includeTests) {
     (structure as FolderTree).tests = { unit: {}, e2e: {} };
   }
-}
+};
 
-function applyAngularOptions(
+const applyAngularOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
-): void {
+): void => {
   if (config.framework !== "angular") return;
   const opts = config.options?.angular;
   if (opts?.includeTests !== false) {
@@ -497,34 +499,34 @@ function applyAngularOptions(
   } else if (structure.e2e !== undefined) {
     delete structure.e2e;
   }
-}
+};
 
-function applyNodeOptions(
+const applyNodeOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
-): void {
+): void => {
   if (config.framework !== "node") return;
   const opts = config.options?.node;
   if (opts?.includeTests === false && structure.tests !== undefined) {
     delete structure.tests;
   }
-}
+};
 
-function applyNestOptions(
+const applyNestOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
-): void {
+): void => {
   if (config.framework !== "nestjs") return;
   const opts = config.options?.nestjs;
   if (opts?.includeTests === false && structure.test !== undefined) {
     delete structure.test;
   }
-}
+};
 
-function applyReactOptions(
+const applyReactOptions = (
   structure: FolderTree,
   config: GeneratorConfig,
-): void {
+): void => {
   if (config.framework !== "react") return;
   const opts = config.options?.react;
   const src = structure.src as FolderTree | undefined;
@@ -540,12 +542,12 @@ function applyReactOptions(
   if (opts?.includeTests) {
     (src as FolderTree)["__tests__"] = {};
   }
-}
+};
 
-export function getModulesContainers(
+const getModulesContainers = (
   structure: FolderTree,
   config: GeneratorConfig,
-): FolderTree[] {
+): FolderTree[] => {
   const { projectType, architecture } = config;
   const containers: FolderTree[] = [];
 
@@ -665,4 +667,6 @@ export function getModulesContainers(
   }
 
   return containers;
-}
+};
+
+export { getTemplate, getModulesContainers };

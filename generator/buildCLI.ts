@@ -1,18 +1,18 @@
 import type { FolderTree } from "@/types/generator";
 
-function hasNestedKeys(obj: FolderTree[string]): obj is FolderTree {
+const hasNestedKeys = (obj: FolderTree[string]): obj is FolderTree => {
   return (
     obj !== null &&
     typeof obj === "object" &&
     !Array.isArray(obj) &&
     Object.keys(obj).length > 0
   );
-}
+};
 
 const buildCLI = (structure: FolderTree, basePath = "."): string => {
   const commands: string[] = [];
 
-  function traverse(obj: FolderTree, path: string) {
+  const traverse = (obj: FolderTree, path: string) => {
     Object.keys(obj).forEach((key) => {
       const newPath = path ? `${path}/${key}` : key;
       commands.push(`mkdir -p "${newPath}"`);
@@ -21,7 +21,7 @@ const buildCLI = (structure: FolderTree, basePath = "."): string => {
         traverse(child, newPath);
       }
     });
-  }
+  };
 
   traverse(structure, basePath);
 

@@ -9,7 +9,7 @@ interface TreeViewProps {
   structure: FolderTree | null;
 }
 
-function getPathsWithChildren(node: FolderTree, prefix = ""): string[] {
+const getPathsWithChildren = (node: FolderTree, prefix = ""): string[] => {
   const paths: string[] = [];
   for (const key of Object.keys(node)) {
     const child = node[key];
@@ -25,7 +25,7 @@ function getPathsWithChildren(node: FolderTree, prefix = ""): string[] {
     }
   }
   return paths;
-}
+};
 
 interface TreeFolderRowProps {
   name: string;
