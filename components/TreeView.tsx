@@ -9,10 +9,7 @@ interface TreeViewProps {
   structure: FolderTree | null;
 }
 
-function getPathsWithChildren(
-  node: FolderTree,
-  prefix = "",
-): string[] {
+function getPathsWithChildren(node: FolderTree, prefix = ""): string[] {
   const paths: string[] = [];
   for (const key of Object.keys(node)) {
     const child = node[key];
@@ -24,9 +21,7 @@ function getPathsWithChildren(
     const path = prefix ? `${prefix}/${key}` : key;
     if (hasChildren) {
       paths.push(path);
-      paths.push(
-        ...getPathsWithChildren(child as FolderTree, path),
-      );
+      paths.push(...getPathsWithChildren(child as FolderTree, path));
     }
   }
   return paths;
@@ -44,7 +39,6 @@ interface TreeFolderRowProps {
 
 const TreeFolderRow = ({
   name,
-  path,
   hasChildren,
   isExpanded,
   onToggle,
@@ -58,7 +52,9 @@ const TreeFolderRow = ({
         onClick={hasChildren ? onToggle : undefined}
         className="inline-flex min-w-0 cursor-pointer items-center gap-2 rounded py-0.5 pr-2 text-left text-sm text-foreground transition hover:bg-neutral-100 dark:hover:bg-neutral-800"
         aria-expanded={hasChildren ? isExpanded : undefined}
-        aria-label={hasChildren ? (isExpanded ? "Collapse" : "Expand") : undefined}
+        aria-label={
+          hasChildren ? (isExpanded ? "Collapse" : "Expand") : undefined
+        }
       >
         <span className="flex h-5 w-5 shrink-0 items-center justify-center">
           {hasChildren ? (

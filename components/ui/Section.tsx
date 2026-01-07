@@ -1,7 +1,6 @@
 interface SectionProps {
   title: string;
   children: React.ReactNode;
-  /** Optional class for the content wrapper (e.g. max-h-80 overflow-y-auto) */
   contentClassName?: string;
 }
 

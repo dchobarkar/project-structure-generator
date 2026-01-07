@@ -2,7 +2,6 @@ import type {
   GeneratorConfig,
   ProjectType,
   Framework,
-  Architecture,
 } from "@/types/generator";
 import { FRAMEWORKS_BY_PROJECT_TYPE } from "@/types/generator";
 import {
@@ -33,10 +32,10 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
   );
 
   const presetModules = (config.modules ?? []).filter((m) =>
-    MODULE_OPTIONS.includes(m),
+    MODULE_OPTIONS.includes(m as (typeof MODULE_OPTIONS)[number]),
   );
   const customModules = (config.modules ?? []).filter(
-    (m) => !MODULE_OPTIONS.includes(m),
+    (m) => !MODULE_OPTIONS.includes(m as (typeof MODULE_OPTIONS)[number]),
   );
 
   const update = <K extends keyof GeneratorConfig>(
@@ -56,7 +55,10 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
       ...config,
       projectType,
       framework,
-      options: optionsForFramework != null ? { [framework]: optionsForFramework } : undefined,
+      options:
+        optionsForFramework != null
+          ? { [framework]: optionsForFramework }
+          : undefined,
     });
   };
 
@@ -65,7 +67,10 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
     onConfigChange({
       ...config,
       framework,
-      options: optionsForFramework != null ? { [framework]: optionsForFramework } : undefined,
+      options:
+        optionsForFramework != null
+          ? { [framework]: optionsForFramework }
+          : undefined,
     });
   };
 
@@ -141,8 +146,7 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
                     group,
                   )}
                   onChange={() => {
-                    const current =
-                      config.options?.nextjs?.routeGroups ?? [];
+                    const current = config.options?.nextjs?.routeGroups ?? [];
                     const next = current.includes(group)
                       ? current.filter((g) => g !== group)
                       : [...current, group];
@@ -359,8 +363,8 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
         </span>
         <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
           Add feature areas (e.g. auth, billing). They appear as{" "}
-          {config.architecture === "domain" ? "domains" : "modules"}
-          {" "}in the generated structure.
+          {config.architecture === "domain" ? "domains" : "modules"} in the
+          generated structure.
         </p>
         <div className="flex flex-col gap-2">
           {MODULE_OPTIONS.map((module) => (

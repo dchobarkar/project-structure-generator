@@ -8,7 +8,6 @@ interface EditableListProps {
   placeholder?: string;
   addButtonLabel?: string;
   removeAriaLabel?: string;
-  /** e.g. "font-mono" for paths */
   inputClassName?: string;
 }
 
@@ -66,11 +65,7 @@ function EditableList({
           </button>
         </div>
       ))}
-      <button
-        type="button"
-        onClick={add}
-        className={addButtonClassName}
-      >
+      <button type="button" onClick={add} className={addButtonClassName}>
         {addButtonLabel}
       </button>
     </div>

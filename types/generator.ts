@@ -12,7 +12,6 @@ export type Framework =
 
 export type Architecture = "layered" | "feature" | "domain";
 
-/** Frameworks valid for each project type (frontend-only, fullstack, backend-only). */
 export const FRAMEWORKS_BY_PROJECT_TYPE: Record<ProjectType, Framework[]> = {
   frontend: ["nextjs", "react", "vue", "angular"],
   fullstack: [
@@ -41,12 +40,10 @@ export interface ReactOptions {
 }
 
 export interface NodeOptions {
-  /** Include tests/ with unit, integration, e2e (default true) */
   includeTests?: boolean;
 }
 
 export interface NestJsOptions {
-  /** Include test/ with e2e (NestJS convention; default true) */
   includeTests?: boolean;
 }
 
@@ -58,17 +55,14 @@ export interface VueOptions {
 }
 
 export interface AngularOptions {
-  /** Include e2e/ at root (Angular convention; default true) */
   includeTests?: boolean;
 }
 
 export interface SvelteKitOptions {
-  /** Include tests/ (Playwright/Vitest; default true) */
   includeTests?: boolean;
 }
 
 export interface RemixOptions {
-  /** Include tests folder (default true) */
   includeTests?: boolean;
 }
 
@@ -77,7 +71,6 @@ export interface GeneratorConfig {
   framework: Framework;
   architecture: Architecture;
   modules: string[];
-  /** Custom folder paths to add anywhere in the tree (e.g. "src/utils/helpers", "app/api/v2") */
   customFolders?: string[];
   options?: {
     nextjs?: NextJsOptions;

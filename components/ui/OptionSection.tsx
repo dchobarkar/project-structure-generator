@@ -9,9 +9,7 @@ const wrapperClassName =
 function OptionSection({ title, children }: OptionSectionProps) {
   return (
     <div className={wrapperClassName}>
-      <span className="block text-sm font-medium text-foreground">
-        {title}
-      </span>
+      <span className="block text-sm font-medium text-foreground">{title}</span>
       {children}
     </div>
   );

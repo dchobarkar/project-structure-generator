@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
 
-/**
- * Returns a stable array of ids that stays in sync with `count`.
- * Used for list keys so inputs don't remount when their value changes.
- */
 export function useStableIds(count: number): number[] {
   const [ids, setIds] = useState<number[]>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIds((prev) => {
       if (prev.length === count) return prev;
       if (prev.length < count)

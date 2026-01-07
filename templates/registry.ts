@@ -75,7 +75,6 @@ const frontendReactDomain: FolderTree = {
   public: {},
 };
 
-// Vue 3 + Vite: create-vue style = src/, public/. stores/ added when Pinia option selected.
 const frontendVueLayered: FolderTree = {
   src: {
     components: {},
@@ -109,7 +108,6 @@ const frontendVueDomain: FolderTree = {
   public: {},
 };
 
-// Angular: src/app (Angular 17+ = core, features, shared).
 const frontendAngularLayered: FolderTree = {
   src: {
     app: { core: {}, features: {}, shared: {} },
@@ -132,7 +130,6 @@ const frontendAngularDomain: FolderTree = {
   public: {},
 };
 
-// SvelteKit: official = src/routes, src/lib, src/lib/server, static, tests.
 const svelteKitLayered: FolderTree = {
   src: {
     lib: { components: {}, utils: {}, server: {} },
@@ -164,7 +161,6 @@ const svelteKitDomain: FolderTree = {
   tests: {},
 };
 
-// Remix: official = app/root, app/routes, public.
 const remixLayered: FolderTree = {
   app: { routes: {}, components: {}, utils: {} },
   modules: {},
@@ -183,7 +179,14 @@ const remixDomain: FolderTree = {
 
 const fullstackLayered: FolderTree = {
   apps: {
-    web: { components: {}, modules: {}, services: {}, hooks: {}, utils: {}, pages: {} },
+    web: {
+      components: {},
+      modules: {},
+      services: {},
+      hooks: {},
+      utils: {},
+      pages: {},
+    },
     api: {
       modules: {},
       controllers: {},
@@ -212,8 +215,6 @@ const fullstackDomain: FolderTree = {
   packages: { shared: {}, domains: {} },
 };
 
-// Node.js: standard = src/ (all app code), tests/ at root.
-// Layered = 3-layer: routes, controllers, middleware, services, repositories, models, utils, config.
 const backendNodeLayered: FolderTree = {
   src: {
     routes: {},
@@ -229,7 +230,6 @@ const backendNodeLayered: FolderTree = {
   tests: { unit: {}, integration: {}, e2e: {} },
 };
 
-// Feature-based: src/modules (each module = feature), common, config, middleware, utils.
 const backendNodeFeature: FolderTree = {
   src: {
     modules: {},
@@ -241,7 +241,6 @@ const backendNodeFeature: FolderTree = {
   tests: { unit: {}, integration: {}, e2e: {} },
 };
 
-// Domain (DDD): src/domains, shared, config, middleware, utils.
 const backendNodeDomain: FolderTree = {
   src: {
     domains: {},
@@ -253,8 +252,6 @@ const backendNodeDomain: FolderTree = {
   tests: { unit: {}, integration: {}, e2e: {} },
 };
 
-// NestJS: official = src/ (app.module, main.ts), test/ at root for e2e.
-// Layered = modules + common (filters, guards, interceptors, decorators), config.
 const backendNestLayered: FolderTree = {
   src: {
     modules: {},
@@ -264,7 +261,6 @@ const backendNestLayered: FolderTree = {
   test: { e2e: {} },
 };
 
-// Feature-based: src/modules (each module = feature with controller, service, dto), common, config.
 const backendNestFeature: FolderTree = {
   src: {
     modules: {},
@@ -274,7 +270,6 @@ const backendNestFeature: FolderTree = {
   test: { e2e: {} },
 };
 
-// Domain (DDD): src/domains (bounded contexts), common, config.
 const backendNestDomain: FolderTree = {
   src: {
     domains: {},
@@ -478,10 +473,7 @@ function applyRemixOptions(
   }
 }
 
-function applyVueOptions(
-  structure: FolderTree,
-  config: GeneratorConfig,
-): void {
+function applyVueOptions(structure: FolderTree, config: GeneratorConfig): void {
   if (config.framework !== "vue") return;
   const opts = config.options?.vue;
   const src = structure.src as FolderTree | undefined;
