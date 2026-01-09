@@ -9,6 +9,7 @@ import { buildCLI } from "@/generator/buildCLI";
 import { ConfigPanel } from "@/components/ConfigPanel";
 import { TreeView } from "@/components/TreeView";
 import { CLIView } from "@/components/CLIView";
+import { Section } from "@/components/ui";
 
 const DEFAULT_CONFIG: GeneratorConfig = {
   projectType: "frontend",
@@ -57,23 +58,19 @@ const Page = () => {
           </aside>
 
           <div className="flex min-w-0 flex-col gap-8">
-            <section className="rounded-lg border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
-              <h2 className="mb-4 text-base font-semibold text-foreground">
-                Folder tree
-              </h2>
-              <div className="max-h-80 overflow-y-auto rounded border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
-                <TreeView structure={structure} />
-              </div>
-            </section>
+            <Section
+              title="Folder tree"
+              contentClassName="max-h-80 overflow-y-auto rounded border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50"
+            >
+              <TreeView structure={structure} />
+            </Section>
 
-            <section className="rounded-lg border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
-              <h2 className="mb-4 text-base font-semibold text-foreground">
-                CLI commands
-              </h2>
-              <div className="max-h-80 overflow-y-auto">
-                <CLIView commands={cliCommands} />
-              </div>
-            </section>
+            <Section
+              title="CLI commands"
+              contentClassName="max-h-80 overflow-y-auto"
+            >
+              <CLIView commands={cliCommands} />
+            </Section>
           </div>
         </div>
       </main>
