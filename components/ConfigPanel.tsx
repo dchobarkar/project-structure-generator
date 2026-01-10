@@ -74,6 +74,26 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
     });
   }, [folderCount]);
 
+  // Stable IDs for custom module rows
+  const [customModuleIds, setCustomModuleIds] = useState<number[]>([]);
+  const customModules = (config.modules ?? []).filter(
+    (m) => !MODULE_OPTIONS.includes(m),
+  );
+  const customModuleCount = customModules.length;
+  useEffect(() => {
+    setCustomModuleIds((prev) => {
+      if (prev.length === customModuleCount) return prev;
+      if (prev.length < customModuleCount)
+        return [
+          ...prev,
+          ...Array.from({ length: customModuleCount - prev.length }, () =>
+            Date.now(),
+          ),
+        ];
+      return prev.slice(0, customModuleCount);
+    });
+  }, [customModuleCount]);
+
   const update = <K extends keyof GeneratorConfig>(
     key: K,
     value: GeneratorConfig[K],
@@ -109,6 +129,29 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
       ? config.modules.filter((m) => m !== module)
       : [...config.modules, module];
     update("modules", modules);
+  };
+
+  const setCustomModuleName = (index: number, name: string) => {
+    const preset = (config.modules ?? []).filter((m) =>
+      MODULE_OPTIONS.includes(m),
+    );
+    const custom = [...customModules];
+    custom[index] = name.trim();
+    update("modules", [...preset, ...custom]);
+  };
+
+  const addCustomModule = () => {
+    setCustomModuleIds((prev) => [...prev, Date.now()]);
+    update("modules", [...(config.modules ?? []), ""]);
+  };
+
+  const removeCustomModule = (index: number) => {
+    setCustomModuleIds((prev) => prev.filter((_, i) => i !== index));
+    const preset = (config.modules ?? []).filter((m) =>
+      MODULE_OPTIONS.includes(m),
+    );
+    const custom = customModules.filter((_, i) => i !== index);
+    update("modules", [...preset, ...custom]);
   };
 
   return (
@@ -511,6 +554,44 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
               {module}
             </label>
           ))}
+        </div>
+        <div className="mt-2">
+          <span className="mb-1.5 block text-xs font-medium text-neutral-600 dark:text-neutral-400">
+            Custom modules
+          </span>
+          <div className="flex flex-col gap-2">
+            {customModules.map((name, index) => (
+              <div
+                key={customModuleIds[index] ?? index}
+                className="flex gap-2"
+              >
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) =>
+                    setCustomModuleName(index, e.target.value)
+                  }
+                  placeholder="e.g. admin, payments"
+                  className="min-w-0 flex-1 rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-foreground placeholder:text-neutral-400 focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder:text-neutral-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeCustomModule(index)}
+                  className="shrink-0 rounded-md border border-neutral-300 px-2.5 py-2 text-sm text-neutral-600 transition hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-600 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-100"
+                  aria-label="Remove module"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addCustomModule}
+              className="self-start rounded-md border border-dashed border-neutral-300 px-3 py-2 text-sm text-neutral-600 transition hover:border-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 dark:border-neutral-600 dark:text-neutral-400 dark:hover:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+            >
+              + Add custom module
+            </button>
+          </div>
         </div>
       </div>
 

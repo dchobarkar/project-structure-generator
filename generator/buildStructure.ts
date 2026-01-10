@@ -27,9 +27,12 @@ export function buildStructure(config: GeneratorConfig): FolderTree {
   const structure = getTemplate(config);
   const containers = getModulesContainers(structure, config);
 
+  const moduleNames = (config.modules ?? []).filter((name) =>
+    typeof name === "string" && name.trim() !== "",
+  );
   for (const container of containers) {
-    config.modules.forEach((moduleName) => {
-      (container as FolderTree)[moduleName] = {};
+    moduleNames.forEach((moduleName) => {
+      (container as FolderTree)[moduleName.trim()] = {};
     });
   }
 
