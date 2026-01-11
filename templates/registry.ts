@@ -9,6 +9,7 @@ import type {
 const frontendNextLayered: FolderTree = {
   app: {},
   components: {},
+  modules: {},
   lib: {},
   hooks: {},
   utils: {},
@@ -41,6 +42,7 @@ const frontendReactLayered: FolderTree = {
   src: {
     components: {},
     pages: {},
+    modules: {},
     hooks: {},
     services: {},
     utils: {},
@@ -78,6 +80,7 @@ const frontendVueLayered: FolderTree = {
   src: {
     components: {},
     views: {},
+    modules: {},
     composables: {},
     utils: {},
     router: {},
@@ -110,6 +113,7 @@ const frontendVueDomain: FolderTree = {
 const frontendAngularLayered: FolderTree = {
   src: {
     app: { core: {}, features: {}, shared: {} },
+    modules: {},
   },
   public: {},
 };
@@ -132,6 +136,7 @@ const frontendAngularDomain: FolderTree = {
 const svelteKitLayered: FolderTree = {
   src: {
     lib: { components: {}, utils: {}, server: {} },
+    modules: {},
     routes: {},
     params: {},
   },
@@ -162,6 +167,7 @@ const svelteKitDomain: FolderTree = {
 // Remix: official = app/root, app/routes, public.
 const remixLayered: FolderTree = {
   app: { routes: {}, components: {}, utils: {} },
+  modules: {},
   public: {},
 };
 
@@ -177,8 +183,9 @@ const remixDomain: FolderTree = {
 
 const fullstackLayered: FolderTree = {
   apps: {
-    web: { components: {}, services: {}, hooks: {}, utils: {}, pages: {} },
+    web: { components: {}, modules: {}, services: {}, hooks: {}, utils: {}, pages: {} },
     api: {
+      modules: {},
       controllers: {},
       services: {},
       repositories: {},
@@ -212,6 +219,7 @@ const backendNodeLayered: FolderTree = {
     routes: {},
     controllers: {},
     middleware: {},
+    modules: {},
     services: {},
     repositories: {},
     models: {},
@@ -278,6 +286,7 @@ const backendNestDomain: FolderTree = {
 
 const backendNextLayered: FolderTree = {
   app: { api: {}, layout: {} },
+  modules: {},
   lib: { services: {}, utils: {} },
   types: {},
   public: {},

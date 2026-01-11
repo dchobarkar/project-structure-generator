@@ -86,11 +86,21 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
     const framework = allowed.includes(config.framework)
       ? config.framework
       : allowed[0];
+    const optionsForFramework = config.options?.[framework];
     onConfigChange({
       ...config,
       projectType,
       framework,
-      options: config.options,
+      options: optionsForFramework != null ? { [framework]: optionsForFramework } : undefined,
+    });
+  };
+
+  const handleFrameworkChange = (framework: Framework) => {
+    const optionsForFramework = config.options?.[framework];
+    onConfigChange({
+      ...config,
+      framework,
+      options: optionsForFramework != null ? { [framework]: optionsForFramework } : undefined,
     });
   };
 
@@ -138,7 +148,7 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
         <select
           id="framework"
           value={config.framework}
-          onChange={(e) => update("framework", e.target.value as Framework)}
+          onChange={(e) => handleFrameworkChange(e.target.value as Framework)}
           className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-foreground focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100"
         >
           {frameworksForSelect.map((opt) => (
@@ -478,9 +488,14 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
       )}
 
       <div>
-        <span className="mb-2 block text-sm font-medium text-foreground">
+        <span className="mb-1.5 block text-sm font-medium text-foreground">
           Feature modules
         </span>
+        <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
+          Add feature areas (e.g. auth, billing). They appear as{" "}
+          {config.architecture === "domain" ? "domains" : "modules"}
+          {" "}in the generated structure.
+        </p>
         <div className="flex flex-col gap-2">
           {MODULE_OPTIONS.map((module) => (
             <label
