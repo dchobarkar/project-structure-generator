@@ -12,6 +12,22 @@ export type Framework =
 
 export type Architecture = "layered" | "feature" | "domain";
 
+/** Frameworks valid for each project type (frontend-only, fullstack, backend-only). */
+export const FRAMEWORKS_BY_PROJECT_TYPE: Record<ProjectType, Framework[]> = {
+  frontend: ["nextjs", "react", "vue", "angular"],
+  fullstack: [
+    "nextjs",
+    "react",
+    "vue",
+    "angular",
+    "sveltekit",
+    "remix",
+    "node",
+    "nestjs",
+  ],
+  backend: ["nextjs", "node", "nestjs"],
+};
+
 export interface NextJsOptions {
   useSrcDirectory?: boolean;
   routeGroups?: string[];

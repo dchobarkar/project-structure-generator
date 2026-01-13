@@ -6,6 +6,7 @@ import type {
   ReactStateManagement,
   VueStateManagement,
 } from "@/types/generator";
+import { FRAMEWORKS_BY_PROJECT_TYPE } from "@/types/generator";
 
 const PROJECT_TYPES: { value: ProjectType; label: string }[] = [
   { value: "frontend", label: "Frontend" },
@@ -50,11 +51,29 @@ interface ConfigPanelProps {
 }
 
 const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
+  const allowedFrameworks = FRAMEWORKS_BY_PROJECT_TYPE[config.projectType];
+  const frameworksForSelect = FRAMEWORKS.filter((opt) =>
+    allowedFrameworks.includes(opt.value),
+  );
+
   const update = <K extends keyof GeneratorConfig>(
     key: K,
     value: GeneratorConfig[K],
   ) => {
     onConfigChange({ ...config, [key]: value });
+  };
+
+  const handleProjectTypeChange = (projectType: ProjectType) => {
+    const allowed = FRAMEWORKS_BY_PROJECT_TYPE[projectType];
+    const framework = allowed.includes(config.framework)
+      ? config.framework
+      : allowed[0];
+    onConfigChange({
+      ...config,
+      projectType,
+      framework,
+      options: config.options,
+    });
   };
 
   const toggleModule = (module: string) => {
@@ -78,7 +97,9 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
         <select
           id="project-type"
           value={config.projectType}
-          onChange={(e) => update("projectType", e.target.value as ProjectType)}
+          onChange={(e) =>
+            handleProjectTypeChange(e.target.value as ProjectType)
+          }
           className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-foreground focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100"
         >
           {PROJECT_TYPES.map((opt) => (
@@ -102,7 +123,7 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
           onChange={(e) => update("framework", e.target.value as Framework)}
           className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-foreground focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100"
         >
-          {FRAMEWORKS.map((opt) => (
+          {frameworksForSelect.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 import type { GeneratorConfig } from "@/types/generator";
+import { FRAMEWORKS_BY_PROJECT_TYPE } from "@/types/generator";
 import { buildStructure } from "@/generator/buildStructure";
 import { buildCLI } from "@/generator/buildCLI";
 import { ConfigPanel } from "@/components/ConfigPanel";
@@ -19,11 +20,17 @@ const DEFAULT_CONFIG: GeneratorConfig = {
 const Page = () => {
   const [config, setConfig] = useState<GeneratorConfig>(DEFAULT_CONFIG);
 
+  const normalizedConfig = useMemo(() => {
+    const allowed = FRAMEWORKS_BY_PROJECT_TYPE[config.projectType];
+    if (allowed.includes(config.framework)) return config;
+    return { ...config, framework: allowed[0] };
+  }, [config]);
+
   const handleConfigChange = useCallback((next: GeneratorConfig) => {
     setConfig(next);
   }, []);
 
-  const structure = buildStructure(config);
+  const structure = buildStructure(normalizedConfig);
   const cliCommands = buildCLI(structure);
 
   return (
@@ -42,7 +49,10 @@ const Page = () => {
         <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
           <aside className="lg:sticky lg:top-8 lg:self-start">
             <div className="rounded-lg border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
-              <ConfigPanel config={config} onConfigChange={handleConfigChange} />
+              <ConfigPanel
+                config={normalizedConfig}
+                onConfigChange={handleConfigChange}
+              />
             </div>
           </aside>
 
