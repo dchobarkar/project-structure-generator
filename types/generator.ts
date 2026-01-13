@@ -77,6 +77,8 @@ export interface GeneratorConfig {
   framework: Framework;
   architecture: Architecture;
   modules: string[];
+  /** Custom folder paths to add anywhere in the tree (e.g. "src/utils/helpers", "app/api/v2") */
+  customFolders?: string[];
   options?: {
     nextjs?: NextJsOptions;
     react?: ReactOptions;

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import type {
   GeneratorConfig,
   ProjectType,
@@ -55,6 +56,23 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
   const frameworksForSelect = FRAMEWORKS.filter((opt) =>
     allowedFrameworks.includes(opt.value),
   );
+
+  // Stable IDs for custom folder rows so the input key never changes while typing
+  const [customFolderIds, setCustomFolderIds] = useState<number[]>([]);
+  const folderCount = (config.customFolders ?? []).length;
+  useEffect(() => {
+    setCustomFolderIds((prev) => {
+      if (prev.length === folderCount) return prev;
+      if (prev.length < folderCount)
+        return [
+          ...prev,
+          ...Array.from({ length: folderCount - prev.length }, () =>
+            Date.now(),
+          ),
+        ];
+      return prev.slice(0, folderCount);
+    });
+  }, [folderCount]);
 
   const update = <K extends keyof GeneratorConfig>(
     key: K,
@@ -478,6 +496,64 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
               {module}
             </label>
           ))}
+        </div>
+      </div>
+
+      <div>
+        <span className="mb-1.5 block text-sm font-medium text-foreground">
+          Custom folders
+        </span>
+        <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
+          Add paths anywhere in the tree (e.g.{" "}
+          <code className="text-xs">src/utils/helpers</code>,{" "}
+          <code className="text-xs">app/api/v2</code>).
+        </p>
+        <div className="flex flex-col gap-2">
+          {(config.customFolders ?? []).map((path, index) => (
+            <div
+              key={customFolderIds[index] ?? index}
+              className="flex gap-2"
+            >
+              <input
+                type="text"
+                value={path}
+                onChange={(e) => {
+                  const list = [...(config.customFolders ?? [])];
+                  list[index] = e.target.value.trim();
+                  onConfigChange({ ...config, customFolders: list });
+                }}
+                placeholder="e.g. src/utils/helpers"
+                className="min-w-0 flex-1 rounded-md border border-neutral-300 bg-white px-3 py-2 font-mono text-sm text-foreground placeholder:text-neutral-400 focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder:text-neutral-500"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setCustomFolderIds((prev) =>
+                    prev.filter((_, i) => i !== index),
+                  );
+                  const list = (config.customFolders ?? []).filter(
+                    (_, i) => i !== index,
+                  );
+                  onConfigChange({ ...config, customFolders: list });
+                }}
+                className="shrink-0 rounded-md border border-neutral-300 px-2.5 py-2 text-sm text-neutral-600 transition hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-600 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-100"
+                aria-label="Remove folder"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => {
+              setCustomFolderIds((prev) => [...prev, Date.now()]);
+              const list = [...(config.customFolders ?? []), ""];
+              onConfigChange({ ...config, customFolders: list });
+            }}
+            className="self-start rounded-md border border-dashed border-neutral-300 px-3 py-2 text-sm text-neutral-600 transition hover:border-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 dark:border-neutral-600 dark:text-neutral-400 dark:hover:border-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
+          >
+            + Add folder
+          </button>
         </div>
       </div>
     </div>
