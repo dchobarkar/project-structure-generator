@@ -18,6 +18,8 @@ const FRAMEWORKS: { value: Framework; label: string }[] = [
   { value: "react", label: "React" },
   { value: "vue", label: "Vue" },
   { value: "angular", label: "Angular" },
+  { value: "sveltekit", label: "SvelteKit" },
+  { value: "remix", label: "Remix" },
   { value: "node", label: "Node" },
   { value: "nestjs", label: "NestJS" },
 ];
@@ -380,6 +382,58 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
               className="h-4 w-4 rounded border-neutral-300 text-neutral-600 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800"
             />
             Include <code className="text-xs">e2e/</code>
+          </label>
+        </div>
+      )}
+
+      {config.framework === "sveltekit" && (
+        <div className="space-y-4 rounded-md border border-neutral-200 bg-neutral-50/50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
+          <span className="block text-sm font-medium text-foreground">
+            SvelteKit options
+          </span>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-foreground">
+            <input
+              type="checkbox"
+              checked={config.options?.sveltekit?.includeTests !== false}
+              onChange={(e) => {
+                const sveltekit = {
+                  ...config.options?.sveltekit,
+                  includeTests: e.target.checked,
+                };
+                onConfigChange({
+                  ...config,
+                  options: { ...config.options, sveltekit },
+                });
+              }}
+              className="h-4 w-4 rounded border-neutral-300 text-neutral-600 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800"
+            />
+            Include <code className="text-xs">tests/</code>
+          </label>
+        </div>
+      )}
+
+      {config.framework === "remix" && (
+        <div className="space-y-4 rounded-md border border-neutral-200 bg-neutral-50/50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
+          <span className="block text-sm font-medium text-foreground">
+            Remix options
+          </span>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-foreground">
+            <input
+              type="checkbox"
+              checked={config.options?.remix?.includeTests ?? false}
+              onChange={(e) => {
+                const remix = {
+                  ...config.options?.remix,
+                  includeTests: e.target.checked,
+                };
+                onConfigChange({
+                  ...config,
+                  options: { ...config.options, remix },
+                });
+              }}
+              className="h-4 w-4 rounded border-neutral-300 text-neutral-600 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800"
+            />
+            Include <code className="text-xs">tests/</code>
           </label>
         </div>
       )}

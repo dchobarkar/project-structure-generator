@@ -128,6 +128,53 @@ const frontendAngularDomain: FolderTree = {
   public: {},
 };
 
+// SvelteKit: official = src/routes, src/lib, src/lib/server, static, tests.
+const svelteKitLayered: FolderTree = {
+  src: {
+    lib: { components: {}, utils: {}, server: {} },
+    routes: {},
+    params: {},
+  },
+  static: {},
+  tests: {},
+};
+
+const svelteKitFeature: FolderTree = {
+  src: {
+    lib: { components: {}, modules: {}, server: {} },
+    routes: {},
+    params: {},
+  },
+  static: {},
+  tests: {},
+};
+
+const svelteKitDomain: FolderTree = {
+  src: {
+    lib: { domains: {}, shared: {}, server: {} },
+    routes: {},
+    params: {},
+  },
+  static: {},
+  tests: {},
+};
+
+// Remix: official = app/root, app/routes, public.
+const remixLayered: FolderTree = {
+  app: { routes: {}, components: {}, utils: {} },
+  public: {},
+};
+
+const remixFeature: FolderTree = {
+  app: { routes: {}, components: {}, features: {} },
+  public: {},
+};
+
+const remixDomain: FolderTree = {
+  app: { routes: {}, domains: {}, shared: {} },
+  public: {},
+};
+
 const fullstackLayered: FolderTree = {
   apps: {
     web: { components: {}, services: {}, hooks: {}, utils: {}, pages: {} },
@@ -267,6 +314,24 @@ const TEMPLATES: Partial<Record<TemplateKey, FolderTree>> = {
   frontend_angular_layered: frontendAngularLayered,
   frontend_angular_feature: frontendAngularFeature,
   frontend_angular_domain: frontendAngularDomain,
+  frontend_sveltekit_layered: svelteKitLayered,
+  frontend_sveltekit_feature: svelteKitFeature,
+  frontend_sveltekit_domain: svelteKitDomain,
+  frontend_remix_layered: remixLayered,
+  frontend_remix_feature: remixFeature,
+  frontend_remix_domain: remixDomain,
+  fullstack_sveltekit_layered: svelteKitLayered,
+  fullstack_sveltekit_feature: svelteKitFeature,
+  fullstack_sveltekit_domain: svelteKitDomain,
+  fullstack_remix_layered: remixLayered,
+  fullstack_remix_feature: remixFeature,
+  fullstack_remix_domain: remixDomain,
+  backend_sveltekit_layered: svelteKitLayered,
+  backend_sveltekit_feature: svelteKitFeature,
+  backend_sveltekit_domain: svelteKitDomain,
+  backend_remix_layered: remixLayered,
+  backend_remix_feature: remixFeature,
+  backend_remix_domain: remixDomain,
   frontend_node_layered: backendNodeLayered,
   frontend_node_feature: backendNodeFeature,
   frontend_node_domain: backendNodeDomain,
@@ -374,7 +439,34 @@ export function getTemplate(config: GeneratorConfig): FolderTree {
   applyNestOptions(structure, config);
   applyVueOptions(structure, config);
   applyAngularOptions(structure, config);
+  applySvelteKitOptions(structure, config);
+  applyRemixOptions(structure, config);
   return structure;
+}
+
+function applySvelteKitOptions(
+  structure: FolderTree,
+  config: GeneratorConfig,
+): void {
+  if (config.framework !== "sveltekit") return;
+  const opts = config.options?.sveltekit;
+  if (opts?.includeTests === false && structure.tests !== undefined) {
+    delete structure.tests;
+  }
+}
+
+function applyRemixOptions(
+  structure: FolderTree,
+  config: GeneratorConfig,
+): void {
+  if (config.framework !== "remix") return;
+  const opts = config.options?.remix;
+  if (opts?.includeTests === false && structure.tests !== undefined) {
+    delete structure.tests;
+  }
+  if (opts?.includeTests === true && !structure.tests) {
+    (structure as FolderTree).tests = {};
+  }
 }
 
 function applyVueOptions(
@@ -476,11 +568,27 @@ export function getModulesContainers(
   if (architecture === "domain") {
     const d = structure.domains;
     if (typeof d === "object" && d !== null) containers.push(d as FolderTree);
+    const appForDomain = structure.app as FolderTree | undefined;
+    if (
+      config.framework === "remix" &&
+      appForDomain?.domains &&
+      typeof appForDomain.domains === "object"
+    ) {
+      containers.push(appForDomain.domains as FolderTree);
+    }
     const src = structure.src as FolderTree | undefined;
     if (src) {
       const sd = src.domains;
       if (typeof sd === "object" && sd !== null)
         containers.push(sd as FolderTree);
+      const lib = src.lib as FolderTree | undefined;
+      if (
+        config.framework === "sveltekit" &&
+        lib?.domains &&
+        typeof lib.domains === "object"
+      ) {
+        containers.push(lib.domains as FolderTree);
+      }
       const app = src.app as FolderTree | undefined;
       if (
         config.framework === "angular" &&
@@ -512,14 +620,34 @@ export function getModulesContainers(
     containers.push(src.features as FolderTree);
     return containers;
   }
-  const app = src?.app as FolderTree | undefined;
+  const lib = src?.lib as FolderTree | undefined;
   if (
-    config.framework === "angular" &&
+    config.framework === "sveltekit" &&
+    architecture === "feature" &&
+    lib?.modules &&
+    typeof lib.modules === "object"
+  ) {
+    containers.push(lib.modules as FolderTree);
+    return containers;
+  }
+  const app = structure.app as FolderTree | undefined;
+  if (
+    config.framework === "remix" &&
     architecture === "feature" &&
     app?.features &&
     typeof app.features === "object"
   ) {
     containers.push(app.features as FolderTree);
+    return containers;
+  }
+  const appFromSrc = src?.app as FolderTree | undefined;
+  if (
+    config.framework === "angular" &&
+    architecture === "feature" &&
+    appFromSrc?.features &&
+    typeof appFromSrc.features === "object"
+  ) {
+    containers.push(appFromSrc.features as FolderTree);
     return containers;
   }
 

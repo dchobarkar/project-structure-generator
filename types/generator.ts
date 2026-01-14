@@ -5,6 +5,8 @@ export type Framework =
   | "react"
   | "vue"
   | "angular"
+  | "sveltekit"
+  | "remix"
   | "node"
   | "nestjs";
 
@@ -44,6 +46,16 @@ export interface AngularOptions {
   includeTests?: boolean;
 }
 
+export interface SvelteKitOptions {
+  /** Include tests/ (Playwright/Vitest; default true) */
+  includeTests?: boolean;
+}
+
+export interface RemixOptions {
+  /** Include tests folder (default true) */
+  includeTests?: boolean;
+}
+
 export interface GeneratorConfig {
   projectType: ProjectType;
   framework: Framework;
@@ -56,6 +68,8 @@ export interface GeneratorConfig {
     nestjs?: NestJsOptions;
     vue?: VueOptions;
     angular?: AngularOptions;
+    sveltekit?: SvelteKitOptions;
+    remix?: RemixOptions;
   };
 }
 
