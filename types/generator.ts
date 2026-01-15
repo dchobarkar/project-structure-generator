@@ -1,6 +1,12 @@
 export type ProjectType = "frontend" | "fullstack" | "backend";
 
-export type Framework = "nextjs" | "react" | "node" | "nestjs";
+export type Framework =
+  | "nextjs"
+  | "react"
+  | "vue"
+  | "angular"
+  | "node"
+  | "nestjs";
 
 export type Architecture = "layered" | "feature" | "domain";
 
@@ -26,6 +32,18 @@ export interface NestJsOptions {
   includeTests?: boolean;
 }
 
+export type VueStateManagement = "none" | "pinia";
+
+export interface VueOptions {
+  stateManagement?: VueStateManagement;
+  includeTests?: boolean;
+}
+
+export interface AngularOptions {
+  /** Include e2e/ at root (Angular convention; default true) */
+  includeTests?: boolean;
+}
+
 export interface GeneratorConfig {
   projectType: ProjectType;
   framework: Framework;
@@ -36,6 +54,8 @@ export interface GeneratorConfig {
     react?: ReactOptions;
     node?: NodeOptions;
     nestjs?: NestJsOptions;
+    vue?: VueOptions;
+    angular?: AngularOptions;
   };
 }
 

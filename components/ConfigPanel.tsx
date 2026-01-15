@@ -4,6 +4,7 @@ import type {
   Framework,
   Architecture,
   ReactStateManagement,
+  VueStateManagement,
 } from "@/types/generator";
 
 const PROJECT_TYPES: { value: ProjectType; label: string }[] = [
@@ -15,6 +16,8 @@ const PROJECT_TYPES: { value: ProjectType; label: string }[] = [
 const FRAMEWORKS: { value: Framework; label: string }[] = [
   { value: "nextjs", label: "Next.js" },
   { value: "react", label: "React" },
+  { value: "vue", label: "Vue" },
+  { value: "angular", label: "Angular" },
   { value: "node", label: "Node" },
   { value: "nestjs", label: "NestJS" },
 ];
@@ -32,6 +35,11 @@ const REACT_STATE_OPTIONS: { value: ReactStateManagement; label: string }[] = [
   { value: "redux", label: "Redux (store/)" },
   { value: "zustand", label: "Zustand (store/)" },
   { value: "context", label: "Context (contexts/)" },
+];
+
+const VUE_STATE_OPTIONS: { value: VueStateManagement; label: string }[] = [
+  { value: "none", label: "None" },
+  { value: "pinia", label: "Pinia (stores/)" },
 ];
 
 interface ConfigPanelProps {
@@ -291,6 +299,87 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
               className="h-4 w-4 rounded border-neutral-300 text-neutral-600 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800"
             />
             Include <code className="text-xs">test/</code> (e2e)
+          </label>
+        </div>
+      )}
+
+      {config.framework === "vue" && (
+        <div className="space-y-4 rounded-md border border-neutral-200 bg-neutral-50/50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
+          <span className="block text-sm font-medium text-foreground">
+            Vue options
+          </span>
+          <div>
+            <label
+              htmlFor="vue-state"
+              className="mb-1.5 block text-xs font-medium text-neutral-600 dark:text-neutral-400"
+            >
+              State management
+            </label>
+            <select
+              id="vue-state"
+              value={config.options?.vue?.stateManagement ?? "none"}
+              onChange={(e) => {
+                const vue = {
+                  ...config.options?.vue,
+                  stateManagement: e.target.value as VueStateManagement,
+                };
+                onConfigChange({
+                  ...config,
+                  options: { ...config.options, vue },
+                });
+              }}
+              className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-foreground focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100"
+            >
+              {VUE_STATE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-foreground">
+            <input
+              type="checkbox"
+              checked={config.options?.vue?.includeTests ?? false}
+              onChange={(e) => {
+                const vue = {
+                  ...config.options?.vue,
+                  includeTests: e.target.checked,
+                };
+                onConfigChange({
+                  ...config,
+                  options: { ...config.options, vue },
+                });
+              }}
+              className="h-4 w-4 rounded border-neutral-300 text-neutral-600 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800"
+            />
+            Include <code className="text-xs">tests/</code> (unit, e2e)
+          </label>
+        </div>
+      )}
+
+      {config.framework === "angular" && (
+        <div className="space-y-4 rounded-md border border-neutral-200 bg-neutral-50/50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
+          <span className="block text-sm font-medium text-foreground">
+            Angular options
+          </span>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-foreground">
+            <input
+              type="checkbox"
+              checked={config.options?.angular?.includeTests !== false}
+              onChange={(e) => {
+                const angular = {
+                  ...config.options?.angular,
+                  includeTests: e.target.checked,
+                };
+                onConfigChange({
+                  ...config,
+                  options: { ...config.options, angular },
+                });
+              }}
+              className="h-4 w-4 rounded border-neutral-300 text-neutral-600 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800"
+            />
+            Include <code className="text-xs">e2e/</code>
           </label>
         </div>
       )}

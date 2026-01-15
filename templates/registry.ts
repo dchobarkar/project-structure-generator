@@ -73,6 +73,61 @@ const frontendReactDomain: FolderTree = {
   public: {},
 };
 
+// Vue 3 + Vite: create-vue style = src/, public/. stores/ added when Pinia option selected.
+const frontendVueLayered: FolderTree = {
+  src: {
+    components: {},
+    views: {},
+    composables: {},
+    utils: {},
+    router: {},
+    assets: {},
+  },
+  public: {},
+};
+
+const frontendVueFeature: FolderTree = {
+  src: {
+    components: {},
+    features: {},
+    composables: {},
+    utils: {},
+    assets: {},
+  },
+  public: {},
+};
+
+const frontendVueDomain: FolderTree = {
+  src: {
+    domains: {},
+    shared: { components: {}, composables: {}, utils: {} },
+    assets: {},
+  },
+  public: {},
+};
+
+// Angular: src/app (Angular 17+ = core, features, shared).
+const frontendAngularLayered: FolderTree = {
+  src: {
+    app: { core: {}, features: {}, shared: {} },
+  },
+  public: {},
+};
+
+const frontendAngularFeature: FolderTree = {
+  src: {
+    app: { core: {}, features: {}, shared: {} },
+  },
+  public: {},
+};
+
+const frontendAngularDomain: FolderTree = {
+  src: {
+    app: { core: {}, domains: {}, shared: {} },
+  },
+  public: {},
+};
+
 const fullstackLayered: FolderTree = {
   apps: {
     web: { components: {}, services: {}, hooks: {}, utils: {}, pages: {} },
@@ -206,6 +261,12 @@ const TEMPLATES: Partial<Record<TemplateKey, FolderTree>> = {
   frontend_react_layered: frontendReactLayered,
   frontend_react_feature: frontendReactFeature,
   frontend_react_domain: frontendReactDomain,
+  frontend_vue_layered: frontendVueLayered,
+  frontend_vue_feature: frontendVueFeature,
+  frontend_vue_domain: frontendVueDomain,
+  frontend_angular_layered: frontendAngularLayered,
+  frontend_angular_feature: frontendAngularFeature,
+  frontend_angular_domain: frontendAngularDomain,
   frontend_node_layered: backendNodeLayered,
   frontend_node_feature: backendNodeFeature,
   frontend_node_domain: backendNodeDomain,
@@ -218,6 +279,12 @@ const TEMPLATES: Partial<Record<TemplateKey, FolderTree>> = {
   fullstack_react_layered: fullstackLayered,
   fullstack_react_feature: fullstackFeature,
   fullstack_react_domain: fullstackDomain,
+  fullstack_vue_layered: frontendVueLayered,
+  fullstack_vue_feature: frontendVueFeature,
+  fullstack_vue_domain: frontendVueDomain,
+  fullstack_angular_layered: frontendAngularLayered,
+  fullstack_angular_feature: frontendAngularFeature,
+  fullstack_angular_domain: frontendAngularDomain,
   fullstack_node_layered: fullstackLayered,
   fullstack_node_feature: fullstackFeature,
   fullstack_node_domain: fullstackDomain,
@@ -230,6 +297,12 @@ const TEMPLATES: Partial<Record<TemplateKey, FolderTree>> = {
   backend_react_layered: backendNodeLayered,
   backend_react_feature: backendNodeFeature,
   backend_react_domain: backendNodeDomain,
+  backend_vue_layered: frontendVueLayered,
+  backend_vue_feature: frontendVueFeature,
+  backend_vue_domain: frontendVueDomain,
+  backend_angular_layered: frontendAngularLayered,
+  backend_angular_feature: frontendAngularFeature,
+  backend_angular_domain: frontendAngularDomain,
   backend_node_layered: backendNodeLayered,
   backend_node_feature: backendNodeFeature,
   backend_node_domain: backendNodeDomain,
@@ -299,7 +372,38 @@ export function getTemplate(config: GeneratorConfig): FolderTree {
   applyReactOptions(structure, config);
   applyNodeOptions(structure, config);
   applyNestOptions(structure, config);
+  applyVueOptions(structure, config);
+  applyAngularOptions(structure, config);
   return structure;
+}
+
+function applyVueOptions(
+  structure: FolderTree,
+  config: GeneratorConfig,
+): void {
+  if (config.framework !== "vue") return;
+  const opts = config.options?.vue;
+  const src = structure.src as FolderTree | undefined;
+  if (!src) return;
+  if (opts?.stateManagement === "pinia") {
+    (src as FolderTree).stores = {};
+  }
+  if (opts?.includeTests) {
+    (structure as FolderTree).tests = { unit: {}, e2e: {} };
+  }
+}
+
+function applyAngularOptions(
+  structure: FolderTree,
+  config: GeneratorConfig,
+): void {
+  if (config.framework !== "angular") return;
+  const opts = config.options?.angular;
+  if (opts?.includeTests !== false) {
+    (structure as FolderTree).e2e = {};
+  } else if (structure.e2e !== undefined) {
+    delete structure.e2e;
+  }
 }
 
 function applyNodeOptions(
@@ -377,6 +481,14 @@ export function getModulesContainers(
       const sd = src.domains;
       if (typeof sd === "object" && sd !== null)
         containers.push(sd as FolderTree);
+      const app = src.app as FolderTree | undefined;
+      if (
+        config.framework === "angular" &&
+        app?.domains &&
+        typeof app.domains === "object"
+      ) {
+        containers.push(app.domains as FolderTree);
+      }
     }
     return containers;
   }
@@ -389,6 +501,25 @@ export function getModulesContainers(
     typeof src.features === "object"
   ) {
     containers.push(src.features as FolderTree);
+    return containers;
+  }
+  if (
+    config.framework === "vue" &&
+    architecture === "feature" &&
+    src?.features &&
+    typeof src.features === "object"
+  ) {
+    containers.push(src.features as FolderTree);
+    return containers;
+  }
+  const app = src?.app as FolderTree | undefined;
+  if (
+    config.framework === "angular" &&
+    architecture === "feature" &&
+    app?.features &&
+    typeof app.features === "object"
+  ) {
+    containers.push(app.features as FolderTree);
     return containers;
   }
 
