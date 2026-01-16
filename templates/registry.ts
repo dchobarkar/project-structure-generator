@@ -143,31 +143,35 @@ const backendNodeDomain: FolderTree = {
   tests: { unit: {}, integration: {}, e2e: {} },
 };
 
+// NestJS: official = src/ (app.module, main.ts), test/ at root for e2e.
+// Layered = modules + common (filters, guards, interceptors, decorators), config.
 const backendNestLayered: FolderTree = {
   src: {
     modules: {},
     common: { filters: {}, guards: {}, interceptors: {}, decorators: {} },
     config: {},
   },
-  test: {},
+  test: { e2e: {} },
 };
 
+// Feature-based: src/modules (each module = feature with controller, service, dto), common, config.
 const backendNestFeature: FolderTree = {
   src: {
     modules: {},
-    common: {},
+    common: { filters: {}, guards: {}, interceptors: {}, decorators: {} },
     config: {},
   },
-  test: {},
+  test: { e2e: {} },
 };
 
+// Domain (DDD): src/domains (bounded contexts), common, config.
 const backendNestDomain: FolderTree = {
   src: {
     domains: {},
-    common: {},
+    common: { filters: {}, guards: {}, interceptors: {}, decorators: {} },
     config: {},
   },
-  test: {},
+  test: { e2e: {} },
 };
 
 const backendNextLayered: FolderTree = {
@@ -294,6 +298,7 @@ export function getTemplate(config: GeneratorConfig): FolderTree {
   applyNextJsOptions(structure, config);
   applyReactOptions(structure, config);
   applyNodeOptions(structure, config);
+  applyNestOptions(structure, config);
   return structure;
 }
 
@@ -305,6 +310,17 @@ function applyNodeOptions(
   const opts = config.options?.node;
   if (opts?.includeTests === false && structure.tests !== undefined) {
     delete structure.tests;
+  }
+}
+
+function applyNestOptions(
+  structure: FolderTree,
+  config: GeneratorConfig,
+): void {
+  if (config.framework !== "nestjs") return;
+  const opts = config.options?.nestjs;
+  if (opts?.includeTests === false && structure.test !== undefined) {
+    delete structure.test;
   }
 }
 

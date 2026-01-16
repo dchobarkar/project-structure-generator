@@ -21,6 +21,11 @@ export interface NodeOptions {
   includeTests?: boolean;
 }
 
+export interface NestJsOptions {
+  /** Include test/ with e2e (NestJS convention; default true) */
+  includeTests?: boolean;
+}
+
 export interface GeneratorConfig {
   projectType: ProjectType;
   framework: Framework;
@@ -30,6 +35,7 @@ export interface GeneratorConfig {
     nextjs?: NextJsOptions;
     react?: ReactOptions;
     node?: NodeOptions;
+    nestjs?: NestJsOptions;
   };
 }
 
