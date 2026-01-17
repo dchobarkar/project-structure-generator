@@ -242,6 +242,33 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
         </div>
       )}
 
+      {config.framework === "node" && (
+        <div className="space-y-4 rounded-md border border-neutral-200 bg-neutral-50/50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
+          <span className="block text-sm font-medium text-foreground">
+            Node options
+          </span>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-foreground">
+            <input
+              type="checkbox"
+              checked={config.options?.node?.includeTests !== false}
+              onChange={(e) => {
+                const node = {
+                  ...config.options?.node,
+                  includeTests: e.target.checked,
+                };
+                onConfigChange({
+                  ...config,
+                  options: { ...config.options, node },
+                });
+              }}
+              className="h-4 w-4 rounded border-neutral-300 text-neutral-600 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800"
+            />
+            Include <code className="text-xs">tests/</code> (unit, integration,
+            e2e)
+          </label>
+        </div>
+      )}
+
       <div>
         <span className="mb-2 block text-sm font-medium text-foreground">
           Feature modules

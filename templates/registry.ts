@@ -103,35 +103,44 @@ const fullstackDomain: FolderTree = {
   packages: { shared: {}, domains: {} },
 };
 
+// Node.js: standard = src/ (all app code), tests/ at root.
+// Layered = 3-layer: routes, controllers, middleware, services, repositories, models, utils, config.
 const backendNodeLayered: FolderTree = {
   src: {
+    routes: {},
     controllers: {},
+    middleware: {},
     services: {},
     repositories: {},
     models: {},
     utils: {},
     config: {},
   },
-  tests: {},
+  tests: { unit: {}, integration: {}, e2e: {} },
 };
 
+// Feature-based: src/modules (each module = feature), common, config, middleware, utils.
 const backendNodeFeature: FolderTree = {
   src: {
     modules: {},
+    middleware: {},
     common: {},
     config: {},
     utils: {},
   },
-  tests: {},
+  tests: { unit: {}, integration: {}, e2e: {} },
 };
 
+// Domain (DDD): src/domains, shared, config, middleware, utils.
 const backendNodeDomain: FolderTree = {
   src: {
     domains: {},
+    middleware: {},
     shared: {},
     config: {},
+    utils: {},
   },
-  tests: {},
+  tests: { unit: {}, integration: {}, e2e: {} },
 };
 
 const backendNestLayered: FolderTree = {
@@ -284,7 +293,19 @@ export function getTemplate(config: GeneratorConfig): FolderTree {
   }
   applyNextJsOptions(structure, config);
   applyReactOptions(structure, config);
+  applyNodeOptions(structure, config);
   return structure;
+}
+
+function applyNodeOptions(
+  structure: FolderTree,
+  config: GeneratorConfig,
+): void {
+  if (config.framework !== "node") return;
+  const opts = config.options?.node;
+  if (opts?.includeTests === false && structure.tests !== undefined) {
+    delete structure.tests;
+  }
 }
 
 function applyReactOptions(

@@ -16,6 +16,11 @@ export interface ReactOptions {
   includeTests?: boolean;
 }
 
+export interface NodeOptions {
+  /** Include tests/ with unit, integration, e2e (default true) */
+  includeTests?: boolean;
+}
+
 export interface GeneratorConfig {
   projectType: ProjectType;
   framework: Framework;
@@ -24,6 +29,7 @@ export interface GeneratorConfig {
   options?: {
     nextjs?: NextJsOptions;
     react?: ReactOptions;
+    node?: NodeOptions;
   };
 }
 
