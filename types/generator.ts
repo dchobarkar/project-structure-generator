@@ -9,6 +9,13 @@ export interface NextJsOptions {
   routeGroups?: string[];
 }
 
+export type ReactStateManagement = "none" | "redux" | "zustand" | "context";
+
+export interface ReactOptions {
+  stateManagement?: ReactStateManagement;
+  includeTests?: boolean;
+}
+
 export interface GeneratorConfig {
   projectType: ProjectType;
   framework: Framework;
@@ -16,6 +23,7 @@ export interface GeneratorConfig {
   modules: string[];
   options?: {
     nextjs?: NextJsOptions;
+    react?: ReactOptions;
   };
 }
 

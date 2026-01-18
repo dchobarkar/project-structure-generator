@@ -40,11 +40,12 @@ const frontendNextDomain: FolderTree = {
 const frontendReactLayered: FolderTree = {
   src: {
     components: {},
-    services: {},
-    hooks: {},
-    utils: {},
     pages: {},
+    hooks: {},
+    services: {},
+    utils: {},
     lib: {},
+    assets: {},
     styles: {},
   },
   public: {},
@@ -53,10 +54,11 @@ const frontendReactLayered: FolderTree = {
 const frontendReactFeature: FolderTree = {
   src: {
     components: {},
-    modules: {},
+    features: {},
     hooks: {},
     utils: {},
     lib: {},
+    assets: {},
   },
   public: {},
 };
@@ -66,6 +68,7 @@ const frontendReactDomain: FolderTree = {
     domains: {},
     shared: { components: {}, hooks: {}, utils: {} },
     lib: {},
+    assets: {},
   },
   public: {},
 };
@@ -280,7 +283,29 @@ export function getTemplate(config: GeneratorConfig): FolderTree {
     structure = JSON.parse(JSON.stringify(backendNodeFeature)) as FolderTree;
   }
   applyNextJsOptions(structure, config);
+  applyReactOptions(structure, config);
   return structure;
+}
+
+function applyReactOptions(
+  structure: FolderTree,
+  config: GeneratorConfig,
+): void {
+  if (config.framework !== "react") return;
+  const opts = config.options?.react;
+  const src = structure.src as FolderTree | undefined;
+  if (!src) return;
+
+  const state = opts?.stateManagement;
+  if (state === "redux" || state === "zustand") {
+    (src as FolderTree).store = {};
+  } else if (state === "context") {
+    (src as FolderTree).contexts = {};
+  }
+
+  if (opts?.includeTests) {
+    (src as FolderTree)["__tests__"] = {};
+  }
 }
 
 export function getModulesContainers(
@@ -319,13 +344,23 @@ export function getModulesContainers(
     return containers;
   }
 
+  const src = structure.src as FolderTree | undefined;
+  if (
+    config.framework === "react" &&
+    architecture === "feature" &&
+    src?.features &&
+    typeof src.features === "object"
+  ) {
+    containers.push(src.features as FolderTree);
+    return containers;
+  }
+
   const m = structure.modules;
   if (typeof m === "object" && m !== null) {
     containers.push(m as FolderTree);
     return containers;
   }
 
-  const src = structure.src as FolderTree | undefined;
   if (src) {
     const sm = src.modules;
     if (typeof sm === "object" && sm !== null)

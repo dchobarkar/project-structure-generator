@@ -3,6 +3,7 @@ import type {
   ProjectType,
   Framework,
   Architecture,
+  ReactStateManagement,
 } from "@/types/generator";
 
 const PROJECT_TYPES: { value: ProjectType; label: string }[] = [
@@ -25,6 +26,13 @@ const ARCHITECTURES: { value: Architecture; label: string }[] = [
 ];
 
 const MODULE_OPTIONS = ["auth", "billing", "analytics", "notifications"];
+
+const REACT_STATE_OPTIONS: { value: ReactStateManagement; label: string }[] = [
+  { value: "none", label: "None" },
+  { value: "redux", label: "Redux (store/)" },
+  { value: "zustand", label: "Zustand (store/)" },
+  { value: "context", label: "Context (contexts/)" },
+];
 
 interface ConfigPanelProps {
   config: GeneratorConfig;
@@ -176,6 +184,61 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
               ))}
             </div>
           </div>
+        </div>
+      )}
+
+      {config.framework === "react" && (
+        <div className="space-y-4 rounded-md border border-neutral-200 bg-neutral-50/50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
+          <span className="block text-sm font-medium text-foreground">
+            React options
+          </span>
+          <div>
+            <label
+              htmlFor="react-state"
+              className="mb-1.5 block text-xs font-medium text-neutral-600 dark:text-neutral-400"
+            >
+              State management
+            </label>
+            <select
+              id="react-state"
+              value={config.options?.react?.stateManagement ?? "none"}
+              onChange={(e) => {
+                const react = {
+                  ...config.options?.react,
+                  stateManagement: e.target.value as ReactStateManagement,
+                };
+                onConfigChange({
+                  ...config,
+                  options: { ...config.options, react },
+                });
+              }}
+              className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-foreground focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100"
+            >
+              {REACT_STATE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-foreground">
+            <input
+              type="checkbox"
+              checked={config.options?.react?.includeTests ?? false}
+              onChange={(e) => {
+                const react = {
+                  ...config.options?.react,
+                  includeTests: e.target.checked,
+                };
+                onConfigChange({
+                  ...config,
+                  options: { ...config.options, react },
+                });
+              }}
+              className="h-4 w-4 rounded border-neutral-300 text-neutral-600 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800"
+            />
+            Include <code className="text-xs">src/__tests__</code>
+          </label>
         </div>
       )}
 
