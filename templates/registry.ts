@@ -9,12 +9,13 @@ import type {
 const frontendNextLayered: FolderTree = {
   app: {},
   components: {},
-  services: {},
+  lib: {},
   hooks: {},
   utils: {},
-  lib: {},
+  services: {},
   types: {},
   styles: {},
+  public: {},
 };
 
 const frontendNextFeature: FolderTree = {
@@ -24,6 +25,7 @@ const frontendNextFeature: FolderTree = {
   lib: {},
   hooks: {},
   types: {},
+  public: {},
 };
 
 const frontendNextDomain: FolderTree = {
@@ -32,6 +34,7 @@ const frontendNextDomain: FolderTree = {
   shared: { components: {}, hooks: {}, utils: {} },
   lib: {},
   types: {},
+  public: {},
 };
 
 const frontendReactLayered: FolderTree = {
@@ -159,18 +162,23 @@ const backendNextLayered: FolderTree = {
   app: { api: {}, layout: {} },
   lib: { services: {}, utils: {} },
   types: {},
+  public: {},
 };
+
 const backendNextFeature: FolderTree = {
   app: { api: {}, layout: {} },
   modules: {},
   lib: {},
   types: {},
+  public: {},
 };
+
 const backendNextDomain: FolderTree = {
   app: { api: {}, layout: {} },
   domains: {},
   lib: {},
   types: {},
+  public: {},
 };
 
 type TemplateKey = `${ProjectType}_${Framework}_${Architecture}`;
@@ -218,12 +226,61 @@ function templateKey(config: GeneratorConfig): TemplateKey {
   return `${config.projectType}_${config.framework}_${config.architecture}`;
 }
 
+const NEXTJS_SRC_KEYS = [
+  "app",
+  "components",
+  "lib",
+  "hooks",
+  "utils",
+  "services",
+  "types",
+  "styles",
+  "modules",
+  "domains",
+  "shared",
+] as const;
+
+function applyNextJsOptions(
+  structure: FolderTree,
+  config: GeneratorConfig,
+): void {
+  if (config.framework !== "nextjs") return;
+  const opts = config.options?.nextjs;
+
+  const routeGroups = opts?.routeGroups?.filter(Boolean) ?? [];
+  if (routeGroups.length > 0) {
+    const appRoot = structure.app as FolderTree | undefined;
+    if (appRoot && typeof appRoot === "object") {
+      for (const name of routeGroups) {
+        (appRoot as FolderTree)[name] = {};
+      }
+    }
+  }
+
+  if (opts?.useSrcDirectory) {
+    const src: FolderTree = {};
+    for (const key of NEXTJS_SRC_KEYS) {
+      const val = structure[key];
+      if (val !== undefined && typeof val === "object" && val !== null) {
+        src[key] = val as FolderTree;
+        delete structure[key];
+      }
+    }
+    structure.src = src;
+  }
+}
+
 export function getTemplate(config: GeneratorConfig): FolderTree {
   const key = templateKey(config);
   const template = TEMPLATES[key];
-  if (template) return JSON.parse(JSON.stringify(template)) as FolderTree;
-  // Fallback: backend node feature
-  return JSON.parse(JSON.stringify(backendNodeFeature)) as FolderTree;
+  let structure: FolderTree;
+  if (template) {
+    structure = JSON.parse(JSON.stringify(template)) as FolderTree;
+  } else {
+    structure = JSON.parse(JSON.stringify(backendNodeFeature)) as FolderTree;
+  }
+  applyNextJsOptions(structure, config);
+  return structure;
 }
 
 export function getModulesContainers(

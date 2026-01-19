@@ -115,6 +115,70 @@ const ConfigPanel = ({ config, onConfigChange }: ConfigPanelProps) => {
         </select>
       </div>
 
+      {config.framework === "nextjs" && (
+        <div className="space-y-4 rounded-md border border-neutral-200 bg-neutral-50/50 p-4 dark:border-neutral-700 dark:bg-neutral-800/50">
+          <span className="block text-sm font-medium text-foreground">
+            Next.js options
+          </span>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-foreground">
+            <input
+              type="checkbox"
+              checked={config.options?.nextjs?.useSrcDirectory ?? false}
+              onChange={(e) => {
+                const nextjs = {
+                  ...config.options?.nextjs,
+                  useSrcDirectory: e.target.checked,
+                };
+                onConfigChange({
+                  ...config,
+                  options: { ...config.options, nextjs },
+                });
+              }}
+              className="h-4 w-4 rounded border-neutral-300 text-neutral-600 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800"
+            />
+            Use <code className="text-xs">src</code> directory (app &amp; code under{" "}
+            <code className="text-xs">src/</code>)
+          </label>
+          <div>
+            <span className="mb-1.5 block text-xs font-medium text-neutral-600 dark:text-neutral-400">
+              Route groups (optional)
+            </span>
+            <div className="flex flex-col gap-1.5">
+              {["(marketing)", "(shop)", "(dashboard)"].map((group) => (
+                <label
+                  key={group}
+                  className="flex cursor-pointer items-center gap-2 text-sm text-foreground"
+                >
+                  <input
+                    type="checkbox"
+                    checked={(
+                      config.options?.nextjs?.routeGroups ?? []
+                    ).includes(group)}
+                    onChange={() => {
+                      const current =
+                        config.options?.nextjs?.routeGroups ?? [];
+                      const next = current.includes(group)
+                        ? current.filter((g) => g !== group)
+                        : [...current, group];
+                      const nextjs = {
+                        ...config.options?.nextjs,
+                        routeGroups: next,
+                      };
+                      onConfigChange({
+                        ...config,
+                        options: { ...config.options, nextjs },
+                      });
+                    }}
+                    className="h-4 w-4 rounded border-neutral-300 text-neutral-600 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800"
+                  />
+                  <code className="text-xs">{group}</code>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div>
         <span className="mb-2 block text-sm font-medium text-foreground">
           Feature modules
